@@ -1,83 +1,93 @@
-/** path_tracker_node.hpp
- *
- * Copyright (C) 2024 Shuo SUN & Advanced Robotics Center, National University of Singapore
- *
- * MIT License
- *
- * Declarations for PathTrackerNode class
- */
-
 #ifndef PATH_TRACKER_NODE_H_
 #define PATH_TRACKER_NODE_H_
 
-#include <iostream>
-#include <string>
-#include <vector>
-
 #include <ros/ros.h>
-#include <ros/console.h>
-#include <std_msgs/Float32.h>
 #include <nav_msgs/Path.h>
 #include <nav_msgs/Odometry.h>
-#include <geometry_msgs/Pose.h>
-#include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/Twist.h>
-#include <geometry_msgs/TransformStamped.h>
-
-#include <tf2/convert.h>
-#include <tf2/LinearMath/Matrix3x3.h>
-#include <tf2/LinearMath/Transform.h>
-#include <tf2/LinearMath/Quaternion.h>
+#include <geometry_msgs/PoseStamped.h>
 #include <tf2_ros/transform_listener.h>
-#include <tf2_ros/transform_broadcaster.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
-
 #include <dynamic_reconfigure/server.h>
 #include <me5413_world/path_trackerConfig.h>
 
-#include "me5413_world/pid.hpp"
+#include "pid.hpp"
 
-namespace me5413_world
-{
+namespace me5413_world {
 
-class PathTrackerNode
-{
+class PathTrackerNode {
  public:
   PathTrackerNode();
-  virtual ~PathTrackerNode() {};
+  virtual ~PathTrackerNode() {}
 
  private:
+  // Callback functions
   void robotOdomCallback(const nav_msgs::Odometry::ConstPtr& odom);
-  void goalPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& goal_pose);
-  void localPathCallback(const nav_msgs::Path::ConstPtr& path);
+  void controlLoopCallback(const ros::TimerEvent&);
+  
+  // Utility functions
+  geometry_msgs::Twist computeControlOutputs(const nav_msgs::Odometry& odom);
 
-  tf2::Transform convertPoseToTransform(const geometry_msgs::Pose& pose);
-  double computeStanelyControl(const double heading_error, const double cross_track_error, const double velocity);
-  geometry_msgs::Twist computeControlOutputs(const nav_msgs::Odometry& odom_robot, const geometry_msgs::Pose& pose_goal);
-
-  // ROS declaration
+  // ROS-related members
   ros::NodeHandle nh_;
-  ros::Timer timer_;
-  ros::Subscriber sub_robot_odom_;
-  ros::Subscriber sub_local_path_;
-  ros::Publisher pub_cmd_vel_;
+  ros::Timer control_loop_timer_;
+  ros::Subscriber odom_subscriber_;
+  ros::Publisher cmd_vel_publisher_;
 
-  tf2_ros::Buffer tf2_buffer_;
-  tf2_ros::TransformListener tf2_listener_;
-  tf2_ros::TransformBroadcaster tf2_bcaster_;
-  dynamic_reconfigure::Server<me5413_world::path_trackerConfig> server;
-  dynamic_reconfigure::Server<me5413_world::path_trackerConfig>::CallbackType f;
+  // Dynamic reconfigure server
+  dynamic_reconfigure::Server<me5413_world::path_trackerConfig> config_server_;
 
-  // Robot pose
-  std::string world_frame_;
-  std::string robot_frame_;
-  nav_msgs::Odometry odom_world_robot_;
-  geometry_msgs::Pose pose_world_goal_;
+  // Robot state and parameters
+  nav_msgs::Odometry current_odom_;
+  double look_ahead_distance_;
 
-  // Controllers
-  control::PID pid_;
+  // PID controllers for speed and steering control
+  PID speed_pid_;
+  PID steering_pid_;
 };
 
-} // namespace me5413_world
+PathTrackerNode::PathTrackerNode() :
+  look_ahead_distance_(1.0), // This value should be set based on the robot size and speed
+  speed_pid_(0.1, 0.01, 0.0), // Initialize with some default PID values
+  steering_pid_(0.1, 0.01, 0.0) { // Initialize with some default PID values
 
-#endif // PATH_TRACKER_NODE_H_
+  odom_subscriber_ = nh_.subscribe("odom", 10, &PathTrackerNode::robotOdomCallback, this);
+  cmd_vel_publisher_ = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 10);
+  control_loop_timer_ = nh_.createTimer(ros::Duration(0.1), &PathTrackerNode::controlLoopCallback, this);
+
+  // Initialize dynamic reconfigure server
+  config_server_.setCallback(boost::bind(&PathTrackerNode::reconfigureCallback, this, _1, _2));
+}
+
+void PathTrackerNode::robotOdomCallback(const nav_msgs::Odometry::ConstPtr& odom) {
+  current_odom_ = *odom;
+}
+
+void PathTrackerNode::controlLoopCallback(const ros::TimerEvent&) {
+  geometry_msgs::Twist cmd_vel = computeControlOutputs(current_odom_);
+  cmd_vel_publisher_.publish(cmd_vel);
+}
+
+geometry_msgs::Twist PathTrackerNode::computeControlOutputs(const nav_msgs::Odometry& odom) {
+  geometry_msgs::Twist cmd_vel;
+
+  // Example implementation
+  double target_speed = speed_pid_.calculate(look_ahead_distance_, odom.twist.twist.linear.x);
+  double steering_angle = steering_pid_.calculate(0.0, odom.pose.pose.orientation.z); // Placeholder for actual calculation
+
+  cmd_vel.linear.x = target_speed;
+  cmd_vel.angular.z = steering_angle;
+
+  return cmd_vel;
+}
+
+// Dynamic reconfigure callback function
+void PathTrackerNode::reconfigureCallback(me5413_world::path_trackerConfig& config, uint32_t level) {
+  look_ahead_distance_ = config.look_ahead_distance;
+  speed_pid_.setParams(config.speed_pid_p, config.speed_pid_i, config.speed_pid_d);
+  steering_pid_.setParams(config.steering_pid_p, config.steering_pid_i, config.steering_pid_d);
+}
+
+}  // namespace me5413_world
+
+#endif  // PATH_TRACKER_NODE_H_
