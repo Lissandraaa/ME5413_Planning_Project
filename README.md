@@ -21,7 +21,7 @@ NUS ME5413 Autonomous Mobile Robotics Planning Project
 ![GitHub Repo stars](https://img.shields.io/github/stars/NUS-Advanced-Robotics-Centre/ME5413_Planning_Project?color=FFE333)
 ![GitHub Repo forks](https://img.shields.io/github/forks/NUS-Advanced-Robotics-Centre/ME5413_Planning_Project?color=FFE333)
 
-![cover_image](src/me5413_world/media/rviz_overview.png)
+
 
 
 
