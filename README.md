@@ -13,6 +13,12 @@ NUS ME5413 Autonomous Mobile Robotics Planning Project
 
 ![cover_image](src/me5413_world/media/rviz_overview.png)
 
+## Results
+![33](https://github.com/Lissandraaa/ME5413_Planning_Project/assets/88422015/5509c930-e0a3-4491-b46a-f20e0132b636)
+![44](https://github.com/Lissandraaa/ME5413_Planning_Project/assets/88422015/2118dae3-61dc-4205-a2bf-0f2429a3e7dd)
+![55](https://github.com/Lissandraaa/ME5413_Planning_Project/assets/88422015/f13448a4-e227-42b5-9477-7add6e481aa1)
+
+
 ## Dependencies
 
 - System Requirements:
@@ -127,9 +133,5 @@ We are following:
 
 The [ME5413_Planning_Project](https://github.com/NUS-Advanced-Robotics-Centre/ME5413_Planning_Project) is released under the [MIT License](https://github.com/NUS-Advanced-Robotics-Centre/ME5413_Planning_Project/blob/main/LICENSE)
 
-## Results
-![33](https://github.com/Lissandraaa/ME5413_Planning_Project/assets/88422015/5509c930-e0a3-4491-b46a-f20e0132b636)
-![44](https://github.com/Lissandraaa/ME5413_Planning_Project/assets/88422015/2118dae3-61dc-4205-a2bf-0f2429a3e7dd)
-![55](https://github.com/Lissandraaa/ME5413_Planning_Project/assets/88422015/f13448a4-e227-42b5-9477-7add6e481aa1)
 
 
