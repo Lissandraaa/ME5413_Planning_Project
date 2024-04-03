@@ -126,3 +126,6 @@ We are following:
 ## License
 
 The [ME5413_Planning_Project](https://github.com/NUS-Advanced-Robotics-Centre/ME5413_Planning_Project) is released under the [MIT License](https://github.com/NUS-Advanced-Robotics-Centre/ME5413_Planning_Project/blob/main/LICENSE)
+
+## Results
+  ![rqt_reconfig_image](src/me5413_world/media/rqt_reconfig.png)
