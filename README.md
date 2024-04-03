@@ -2,6 +2,16 @@
 
 NUS ME5413 Autonomous Mobile Robotics Planning Project
 
+## Results
+- Under the Pure persuit algorithm, the cart can move along the given trajectory with a small error, when each parameter of the GUI panel: "speed_target" is 0.3, "track_A_axis" is 8.0, "track_B_axis" is 8.0, "track_up_num" is 1000, " local_prev_wp" is 10, "local_next_wp" is 60, "speed_target" is 0.3, "PID_Kp" is 0.5, "PID_Ki" is 0.2, "PID_Kd" is 0.3, "Stanley_K" is 0.7.
+ 
+- When the values of "track_A_axis" and "track_B_axis" are increased, the error of path tracking of the trolley becomes smaller. When the speed of the trolley is slowed down, the error of the trolley's path tracking also decreases. This shows that for smoother curves, the trolley can fulfill the path tracking task better, and the actual trajectory is closer to the predetermined trajectory.
+
+![33](https://github.com/Lissandraaa/ME5413_Planning_Project/assets/88422015/5509c930-e0a3-4491-b46a-f20e0132b636)
+![44](https://github.com/Lissandraaa/ME5413_Planning_Project/assets/88422015/2118dae3-61dc-4205-a2bf-0f2429a3e7dd)
+![55](https://github.com/Lissandraaa/ME5413_Planning_Project/assets/88422015/f13448a4-e227-42b5-9477-7add6e481aa1)
+
+
 > Authors: [Ziggy](https://github.com/ziggyhuang) and [Shuo](https://github.com/SS47816)
 
 ![Ubuntu 20.04](https://img.shields.io/badge/OS-Ubuntu_20.04-informational?style=flat&logo=ubuntu&logoColor=white&color=2bbc8a)
@@ -14,14 +24,6 @@ NUS ME5413 Autonomous Mobile Robotics Planning Project
 ![cover_image](src/me5413_world/media/rviz_overview.png)
 
 
-## Results
-- Under the Pure persuit algorithm, the cart can move along the given trajectory with a small error, when each parameter of the GUI panel: "speed_target" is 0.3, "track_A_axis" is 8.0, "track_B_axis" is 8.0, "track_up_num" is 1000, " local_prev_wp" is 10, "local_next_wp" is 60, "speed_target" is 0.3, "PID_Kp" is 0.5, "PID_Ki" is 0.2, "PID_Kd" is 0.3, "Stanley_K" is 0.7.
- 
-- When the values of "track_A_axis" and "track_B_axis" are increased, the error of path tracking of the trolley becomes smaller. When the speed of the trolley is slowed down, the error of the trolley's path tracking also decreases. This shows that for smoother curves, the trolley can fulfill the path tracking task better, and the actual trajectory is closer to the predetermined trajectory.
-
-![33](https://github.com/Lissandraaa/ME5413_Planning_Project/assets/88422015/5509c930-e0a3-4491-b46a-f20e0132b636)
-![44](https://github.com/Lissandraaa/ME5413_Planning_Project/assets/88422015/2118dae3-61dc-4205-a2bf-0f2429a3e7dd)
-![55](https://github.com/Lissandraaa/ME5413_Planning_Project/assets/88422015/f13448a4-e227-42b5-9477-7add6e481aa1)
 
 
 ## Dependencies
